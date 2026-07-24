@@ -7,8 +7,8 @@
 - **프론트엔드**: React 18 + TypeScript + Vite
 - **차트**: recharts (막대그래프, 꺾은선그래프)
 - **인증/DB**: Supabase (Auth + Postgres + Row Level Security)
-- **외부 데이터**: 공공데이터포털(data.go.kr) 인천공항 여객예고정보 API — 프론트엔드에서 브라우저 직접 호출
-- **백엔드 서버 없음** — 프론트엔드가 공공데이터 API와 Supabase를 직접 호출하는 서버리스 구조
+- **외부 데이터**: 공공데이터포털(data.go.kr) 인천공항 여객예고정보 API — Supabase Edge Function(`airport-proxy`)이 대행 호출, 프론트엔드는 Edge Function만 호출
+- **백엔드 서버 없음** — 프론트엔드가 Supabase(Auth/DB/Edge Function)만 호출하는 서버리스 구조 (공공데이터 API 키는 Edge Function Secret으로 관리, 브라우저에는 노출되지 않음)
 
 ## 시작하기
 
@@ -21,11 +21,10 @@ npm run preview   # 빌드 결과 미리보기
 
 ### 환경변수 (`.env`)
 
-`.env.example` 참고. 셋 다 `VITE_` 접두사가 붙어 클라이언트 번들에 포함되며(공공데이터 API 키는 설계상 브라우저에 노출됨 — PRD.md §9 참고), `.env`는 `.gitignore`에 포함되어 있다.
+`.env.example` 참고. 둘 다 `VITE_` 접두사가 붙어 클라이언트 번들에 포함된다 (`.env`는 `.gitignore`에 포함되어 있다). 공공데이터포털 API 키는 프론트엔드 환경변수가 아니라 Supabase Edge Function의 Secret(`AIRPORT_API_KEY`)으로 관리한다 — PRD.md §9 참고.
 
 | 변수 | 용도 |
 |---|---|
-| `VITE_AIRPORT_API_KEY` | 공공데이터포털 서비스 키 |
 | `VITE_SUPABASE_URL` | Supabase 프로젝트 URL |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon(publishable) key |
 

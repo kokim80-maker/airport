@@ -8,7 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 반드시 지킬 규칙
 
-- 공공데이터포털 API 키는 `.env`의 `VITE_AIRPORT_API_KEY`로 관리한다.
+- 공공데이터포털 API 키는 Supabase Edge Function의 Secret(`AIRPORT_API_KEY`)으로만 관리하며, 프론트엔드 코드나 `.env`에는 절대 두지 않는다.
+- 프론트엔드는 공공데이터 API를 직접 호출하지 않고, 반드시 Supabase Edge Function을 통해서만 호출한다.
 - Supabase URL과 anon key는 `.env`의 `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`로 관리한다. service_role key는 프론트엔드 코드나 `.env`에 절대 두지 않는다 (RLS를 우회함).
 - 즐겨찾기 테이블은 RLS를 켜고 "본인 데이터만" 정책(SELECT/INSERT/DELETE, `auth.uid() = user_id`)을 적용한다. RLS를 끈 채로 테스트하지 않고, 정책 변경 후에는 Supabase MCP의 `get_advisors`로 점검한다.
 - `.env`는 `.gitignore`에 포함한다. 대신 값 없이 변수명만 있는 `.env.example`을 커밋한다.
